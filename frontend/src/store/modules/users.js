@@ -1,4 +1,6 @@
 import {API_ROOT} from "../../../globals";
+import userFormValidator from "@/validator";
+import router from "@/router";
 
 export default {
     state: {
@@ -37,17 +39,18 @@ export default {
                     "Authorization": 'Basic ' + btoa(username + ":" + password)
                 }
             })
-                .then(() => alert('User deleted'))
                 .catch(() => alert('Error during deleting'))
             ctx.dispatch('fetchUsers')
         },
 
         async updateUser(ctx, user) {
-            console.log(user)
+            if (!userFormValidator(user)) {
+                return null
+            }
+
             const user_id = user.id
             delete user.id
             const {username, password,} = ctx.getters.getUserCredentials
-            console.log(username)
             await fetch(API_ROOT + "users/" + user_id, {
                 method: 'PUT',
                 headers: {
@@ -62,6 +65,10 @@ export default {
         },
 
         async createUser(ctx, user) {
+            if (!userFormValidator(user)) {
+                return null
+            }
+
             const {username, password,} = ctx.getters.getUserCredentials
             await fetch(API_ROOT + "users/", {
                 method: 'POST',
@@ -74,6 +81,7 @@ export default {
                 .then(() => alert("User created"))
                 .catch(() => alert("Error during creating"))
             ctx.dispatch('fetchUsers')
+            router.push({name: "users"})
         },
     },
 }

@@ -1,4 +1,5 @@
 import {API_ROOT} from "../../../globals";
+import router from "@/router";
 
 export default {
     state: {
@@ -25,10 +26,16 @@ export default {
         },
         logout(state) {
             state.user = null
+            router.push({name: "guest"})
         }
     },
     actions: {
         async loginUser(ctx, credentials) {
+            if (!Object.values(credentials).every(el => el)) {
+                return null
+            }
+
+
             const res = await fetch(API_ROOT + 'login', {
                 method: 'POST',
                 headers: {
@@ -37,8 +44,11 @@ export default {
             })
                 .catch(() => alert("Login error"))
 
-            const user_data = await res.json()
-            ctx.commit('setUser', {...credentials, ...user_data})
+            if (res.status === 200) {
+                const user_data = await res.json()
+                ctx.commit('setUser', {...credentials, ...user_data})
+                router.push({name: "users"})
+            }
         }
     },
 }

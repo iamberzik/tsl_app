@@ -1,10 +1,10 @@
 <template>
   <form @submit.prevent class="flex flex-col gap-2 w-fit">
-    <CustomInput v-model="user.name" input_type="string" label="Name"/>
-    <CustomInput v-model="user.phone" input_type="string" label="Phone"/>
-    <CustomInput v-model="user.email" input_type="string" label="E-mail"/>
+    <CustomInput v-model="user.name" type="text" label="Name"/>
+    <CustomInput v-model="user.phone" type="text"  label="Phone"/>
+    <CustomInput v-model="user.email" type="text"  label="E-mail"/>
     <CustomInputWithDatalist v-model="user.country" label="Country" id="countriesInput" :options="countries"/>
-    <CustomInput v-model="user.age" input_type="number" label="Age"/>
+    <CustomInput v-model="user.age" type="number" label="Age"/>
     <div class="flex justify-end mr-2">
       <button v-if="this.$route.params.id" type="submit"
               class="w-[80px] bg-blue-600 font-medium text-white hover:opacity-75 rounded"
@@ -37,7 +37,7 @@ export default {
         phone: "",
         email: "",
         country: "",
-        age: 0
+        age: 18
       },
       countries: ["Russia", "USA", "Australia"]
     }
